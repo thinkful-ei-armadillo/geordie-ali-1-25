@@ -1,20 +1,29 @@
-function getDogImages(numDogs = 3) {
+'use strict';
+
+function getDogImages() {
     
-    fetch(`https://dog.ceo/api/breeds/image/random/`)
+  fetch('https://dog.ceo/api/breeds/image/random/3')
     .then(reponse => reponse.json())
-    .then(responseJson => console.log(reponseJson))
+    .then(responeJson => displayResults(responeJson))
+    .then(responseJson => console.log(responseJson))
     .catch(error => alert('Try another input'));
 }
 
+function displayResults(responeJson){
+  $('.default-images').replaceWith(
+    `<img src="${responeJson.message}" class="default-images">`
+  );
+}
+
 function inputForm() {
-    $('form').submit(event => {
-        event.preventDefault();
+  $('form').on('js-dog-submit', 'submit', (event => {
+    event.preventDefault();
         
-        getDogImages();
-    });
+    getDogImages();
+  }));
 }
 
 $(function() {
-    console.log('Waiting for input');
-    inputForm();
-})
+  console.log('Waiting for input');
+  inputForm();
+});
