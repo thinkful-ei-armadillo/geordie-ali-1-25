@@ -1,25 +1,41 @@
 'use strict';
 
-function getDogImages() {
-    
-  fetch('https://dog.ceo/api/breeds/image/random/3')
-    .then(reponse => reponse.json())
-    .then(responeJson => displayResults(responeJson))
-    .then(responseJson => console.log(responseJson))
-    .catch(error => alert('Try another input'));
+function getDogImages(numDogs = 3) {
+  if (numDogs > 50) {
+      alert("Too many dogs");
+  }  else {
+  fetch(`https://dog.ceo/api/breeds/image/random/${numDogs}`)
+    .then(response => response.json())
+    .then(responseJson => { 
+        displayResults(responseJson)
+    })
+    .catch(error => alert(error.message));
+  }
 }
 
-function displayResults(responeJson){
-  $('.default-images').replaceWith(
-    `<img src="${responeJson.message}" class="default-images">`
-  );
+function generateHtml(reponse) {
+    let htmlText = "";
+  for (let i = 0; i < reponse.message.length; i++) {
+    htmlText += `<img src="${reponse.message[i]}" class="default-images">`;
+    }
+  return htmlText;
 }
+
+function displayResults(responseJson) {
+    console.log(responseJson);
+    $('.default-images').html(
+      generateHtml(responseJson));
+    
+  }
 
 function inputForm() {
-  $('form').on('js-dog-submit', 'submit', (event => {
+  $('form').on('submit', (event => {
     event.preventDefault();
-        
-    getDogImages();
+    if (!event.target.dogEntry.value) {
+        getDogImages();
+    } else {   
+    getDogImages(parseInt(event.target.dogEntry.value, 10));
+    }
   }));
 }
 
