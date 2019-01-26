@@ -1,10 +1,7 @@
-'use strict';
+use strict';
 
-function getDogImages(numDogs = 3) {
-  if (numDogs > 50) {
-      alert("Too many dogs");
-  }  else {
-  fetch(`https://dog.ceo/api/breeds/image/random/${numDogs}`)
+function getDogBreed(breed) {
+    fetch(`https://images.dog.ceo/breeds/${generateBreed(breed)}/images/random`)
     .then(response => response.json())
     .then(responseJson => { 
         displayResults(responseJson)
@@ -13,10 +10,21 @@ function getDogImages(numDogs = 3) {
   }
 }
 
-function generateHtml(reponse) {
+function generateBreed(response) {
+    let breedArray = response.split(" "); // [french, bulldog]
+    let finalArray = [];
+    for (let i = 0; i < breedArray.length; i++) {
+        finalArray.append(breedArray.pop()); // finalArray = [bulldog, french]
+    }
+    let breedText = finalArray.join('-');
+    return generatedHtml(breedText);
+}
+
+function generateHtml(response) {
     let htmlText = "";
-  for (let i = 0; i < reponse.message.length; i++) {
-    htmlText += `<img src="${reponse.message[i]}" class="default-images">`;
+
+  for (let i = 0; i < finalArray.length; i++) {
+    htmlText = `<img src="${breedText}" class="default-images">`;
     }
   return htmlText;
 }
